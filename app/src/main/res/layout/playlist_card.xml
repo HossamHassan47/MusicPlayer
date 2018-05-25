@@ -18,10 +18,12 @@
 
             <ImageView
                 android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/playlist_cover_height"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
                 android:scaleType="fitXY" />
 
             <TextView
@@ -33,7 +35,7 @@
                 android:paddingRight="@dimen/playlist_title_padding"
                 android:paddingTop="@dimen/playlist_title_padding"
                 android:textColor="@color/album_title"
-                android:textSize="@dimen/playlist_title" />
+                android:textSize="@dimen/playlist_title_size" />
 
             <TextView
                 android:id="@+id/count"
@@ -43,7 +45,7 @@
                 android:paddingBottom="@dimen/songs_count_padding_bottom"
                 android:paddingLeft="@dimen/playlist_title_padding"
                 android:paddingRight="@dimen/playlist_title_padding"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/songs_count_size" />
 
             <ImageView
                 android:id="@+id/overflow"

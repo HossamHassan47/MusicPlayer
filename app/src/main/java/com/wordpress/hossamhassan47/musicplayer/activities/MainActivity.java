@@ -67,47 +67,34 @@ public class MainActivity extends AppCompatActivity {
      * Adding few playlists for testing
      */
     private void preparePlaylists() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        Playlist a = new Playlist("True Romance", 13, covers[0]);
+        Playlist a = new Playlist("True Romance", 13, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Xscpae", 8, covers[1]);
+        a = new Playlist("Xscpae", 8, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Maroon 5", 11, covers[2]);
+        a = new Playlist("Maroon 5", 11, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Born to Die", 12, covers[3]);
+        a = new Playlist("Born to Die", 12, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Honeymoon", 14, covers[4]);
+        a = new Playlist("Honeymoon", 14, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("I Need a Doctor", 1, covers[5]);
+        a = new Playlist("I Need a Doctor", 1, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Loud", 11, covers[6]);
+        a = new Playlist("Loud", 11, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Legend", 14, covers[7]);
+        a = new Playlist("Legend", 14, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Hello", 11, covers[8]);
+        a = new Playlist("Hello", 11, R.drawable.ic_playlist);
         playlists.add(a);
 
-        a = new Playlist("Greatest Hits", 17, covers[9]);
+        a = new Playlist("Greatest Hits", 17, R.drawable.ic_playlist);
         playlists.add(a);
 
         adapter.notifyDataSetChanged();
