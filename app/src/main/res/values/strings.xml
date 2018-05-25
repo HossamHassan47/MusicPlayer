@@ -9,4 +9,12 @@
     <string name="action_rename">Rename</string>
     <string name="action_delete">Delete</string>
 
+    <string name="add_new_playlist_fragment">Add New Playlist</string>
+
+    <string name="dialog_title">Playlist</string>
+    <string name="dialog_ok">Save</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <string name="tool_tip_playlist_name">Playlist Name</string>
+
 </resources>

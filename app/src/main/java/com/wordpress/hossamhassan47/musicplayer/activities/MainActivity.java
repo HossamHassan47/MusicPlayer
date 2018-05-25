@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,13 +18,15 @@ import android.view.MenuItem;
 
 import com.wordpress.hossamhassan47.musicplayer.R;
 import com.wordpress.hossamhassan47.musicplayer.adapters.PlaylistAdapter;
+import com.wordpress.hossamhassan47.musicplayer.fragments.AddPlaylistFragment;
+import com.wordpress.hossamhassan47.musicplayer.fragments.NoticeDialogListener;
 import com.wordpress.hossamhassan47.musicplayer.model.Playlist;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NoticeDialogListener {
 
     private RecyclerView recyclerView;
     private PlaylistAdapter adapter;
@@ -40,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AddPlaylistFragment fragment = new AddPlaylistFragment();
+
+                fragment.show(getSupportFragmentManager(), "dialog_AddPlaylistFragment");
             }
         });
 
@@ -79,6 +83,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+        Playlist a = new Playlist("Playlist New", 0, R.drawable.ic_playlist);
+        playlists.add(a);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 
     /**
@@ -148,4 +166,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
