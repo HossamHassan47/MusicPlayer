@@ -52,6 +52,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Playlist album = playlists.get(position);
+
         holder.title.setText(album.getTitle());
         holder.count.setText(album.getNumOfSongs() + " songs");
 
@@ -89,11 +90,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.action_add_favourite:
-                    Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
+                case R.id.action_play:
+                    Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
                     return true;
-                case R.id.action_play_next:
-                    Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
+                case R.id.action_rename:
+                    Toast.makeText(mContext, "Rename", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.action_delete:
+                    Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
                     return true;
                 default:
             }

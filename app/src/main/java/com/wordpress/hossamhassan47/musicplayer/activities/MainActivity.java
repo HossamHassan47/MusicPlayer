@@ -21,6 +21,7 @@ import com.wordpress.hossamhassan47.musicplayer.model.Playlist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,35 +68,12 @@ public class MainActivity extends AppCompatActivity {
      * Adding few playlists for testing
      */
     private void preparePlaylists() {
-        Playlist a = new Playlist("True Romance", 13, R.drawable.ic_playlist);
-        playlists.add(a);
+        Random random = new Random();
 
-        a = new Playlist("Xscpae", 8, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Maroon 5", 11, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Born to Die", 12, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Honeymoon", 14, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("I Need a Doctor", 1, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Loud", 11, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Legend", 14, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Hello", 11, R.drawable.ic_playlist);
-        playlists.add(a);
-
-        a = new Playlist("Greatest Hits", 17, R.drawable.ic_playlist);
-        playlists.add(a);
+        for (int i = 0; i < 10; i++) {
+            Playlist a = new Playlist("Playlist " + (i + 1), random.nextInt(100), R.drawable.ic_playlist);
+            playlists.add(a);
+        }
 
         adapter.notifyDataSetChanged();
     }
