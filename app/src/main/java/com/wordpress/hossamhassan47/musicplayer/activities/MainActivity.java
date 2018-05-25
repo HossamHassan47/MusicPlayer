@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Set title
+        setTitle(getResources().getString(R.string.title_playlists));
+
         // Get Recycler View
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
