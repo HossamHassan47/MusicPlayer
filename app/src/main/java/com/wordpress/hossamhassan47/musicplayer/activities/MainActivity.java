@@ -39,15 +39,15 @@ public class MainActivity extends AppCompatActivity implements NoticeDialogListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddPlaylistFragment fragment = new AddPlaylistFragment();
-
-                fragment.show(getSupportFragmentManager(), "dialog_AddPlaylistFragment");
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AddPlaylistFragment fragment = new AddPlaylistFragment();
+//
+//                fragment.show(getSupportFragmentManager(), "dialog_AddPlaylistFragment");
+//            }
+//        });
 
         // Set title
         setTitle(getResources().getString(R.string.title_playlists));
@@ -160,7 +160,10 @@ public class MainActivity extends AppCompatActivity implements NoticeDialogListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_new_playlist) {
+            AddPlaylistFragment fragment = new AddPlaylistFragment();
+
+            fragment.show(getSupportFragmentManager(), "dialog_AddPlaylistFragment");
             return true;
         }
 

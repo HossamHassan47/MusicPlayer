@@ -1,6 +1,7 @@
 package com.wordpress.hossamhassan47.musicplayer.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.wordpress.hossamhassan47.musicplayer.R;
+import com.wordpress.hossamhassan47.musicplayer.activities.NowPlayingActivity;
 import com.wordpress.hossamhassan47.musicplayer.model.Playlist;
 
 import java.util.List;
@@ -65,6 +67,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
                 showPopupMenu(holder.overflow);
             }
         });
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, NowPlayingActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -90,9 +100,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.action_play:
-                    Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
-                    return true;
                 case R.id.action_rename:
                     Toast.makeText(mContext, "Rename", Toast.LENGTH_SHORT).show();
                     return true;

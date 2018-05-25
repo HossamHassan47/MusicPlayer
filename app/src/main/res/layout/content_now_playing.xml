@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.NowPlayingActivity"
+    tools:showIn="@layout/activity_now_playing">
+
+    <!--Play/Pause buttons-->
+    <LinearLayout
+        android:id="@+id/linear_layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:min="0"
+            android:paddingBottom="@dimen/default_padding"
+            android:progress="25" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal"
+            android:padding="@dimen/default_padding">
+
+            <ImageView
+                android:id="@+id/image_view_add_items"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_playlist_add_white_24" />
+
+            <ImageView
+                android:id="@+id/image_view_previous"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_skip_previous_white_36" />
+
+            <ImageView
+                android:id="@+id/image_view_play"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_play_circle_outline_white_48" />
+
+            <ImageView
+                android:id="@+id/image_view_next"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_skip_next_white_36" />
+
+            <ImageView
+                android:id="@+id/image_view_repeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_repeat_white_24" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/linear_layout_buttons">
+
+        <!--Subject-->
+        <FrameLayout
+            android:id="@+id/frame_layout_quiz_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_view_quiz_subject"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Song X currenlty playing"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+    </ScrollView>
+</RelativeLayout>
