@@ -13,7 +13,7 @@
 
     <dimen name="card_playlist_radius">0dp</dimen>
 
-    <dimen name="playlist_margin">5dp</dimen>
+    <dimen name="playlist_margin">8dp</dimen>
     <dimen name="playlist_cover_height">96dp</dimen>
     <dimen name="playlist_title_padding">10dp</dimen>
     <dimen name="playlist_title_size">15sp</dimen>
@@ -25,4 +25,6 @@
 
     <dimen name="songs_count_padding_bottom">5dp</dimen>
     <dimen name="songs_count_size">12sp</dimen>
+
+    <dimen name="song_margin">4dp</dimen>
 </resources>

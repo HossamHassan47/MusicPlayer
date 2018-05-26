@@ -18,7 +18,7 @@ import com.wordpress.hossamhassan47.musicplayer.R;
 
 public class AddPlaylistFragment extends DialogFragment {
     NoticeDialogListener mListener;
-    String strQuizSubject;
+    String playlistName;
 
     @Override
     public void onAttach(Activity activity) {
@@ -34,18 +34,21 @@ public class AddPlaylistFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_add_playlist, null);
 
-        builder.setTitle(getResources().getString(R.string.dialog_title))
+        // Set dialog title
+        String dialogTitle = playlistName == null ? getResources().getString(R.string.dialog_title_new)
+                : getResources().getString(R.string.dialog_title_rename);
+
+        builder.setTitle(dialogTitle)
                 .setView(view)
                 .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         // Add new playlist
+                        // Rename playlist
 
                         // Send the positive button event back to the host activity
                         mListener.onDialogPositiveClick(AddPlaylistFragment.this);

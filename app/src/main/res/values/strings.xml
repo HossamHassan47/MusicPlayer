@@ -1,22 +1,27 @@
 <resources>
     <string name="app_name">Music Player</string>
 
+    <!--Playlists Activity-->
     <string name="title_playlists">Playlists</string>
 
-    <string name="action_settings">Settings</string>
+    <!--Main Activity Menu-->
     <string name="action_new_playlist">New Playlist</string>
+    <string name="action_settings">Settings</string>
 
+    <!--Playlist Context Menu-->
     <string name="action_play">Play</string>
     <string name="action_rename">Rename</string>
     <string name="action_delete">Delete</string>
 
-    <string name="add_new_playlist_fragment">Add New Playlist</string>
-
-    <string name="dialog_title">Playlist</string>
+    <!--Add New Playlist Fragment-->
+    <string name="add_new_playlist_fragment">New Playlist</string>
+    <string name="dialog_title_new">New Playlist</string>
+    <string name="dialog_title_rename">Rename</string>
     <string name="dialog_ok">Save</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="tool_tip_playlist_name">Name</string>
 
-    <string name="tool_tip_playlist_name">Playlist Name</string>
+    <!--Now Playing Activity-->
     <string name="title_activity_now_playing">Now Playing</string>
 
 </resources>

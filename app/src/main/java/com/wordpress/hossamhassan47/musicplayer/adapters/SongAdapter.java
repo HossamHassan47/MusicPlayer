@@ -1,7 +1,6 @@
 package com.wordpress.hossamhassan47.musicplayer.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,55 +12,53 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.wordpress.hossamhassan47.musicplayer.R;
 import com.wordpress.hossamhassan47.musicplayer.activities.MainActivity;
-import com.wordpress.hossamhassan47.musicplayer.activities.NowPlayingActivity;
 import com.wordpress.hossamhassan47.musicplayer.fragments.AddPlaylistFragment;
-import com.wordpress.hossamhassan47.musicplayer.model.Playlist;
+import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
 import java.util.List;
 
-public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyViewHolder> {
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> {
+
     private Context mContext;
-    private List<Playlist> playlists;
+    private List<Song> songList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
+        public TextView title, path;
+        public ImageView overflow;
 
         public MyViewHolder(View view) {
             super(view);
 
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            title = (TextView) view.findViewById(R.id.text_view_song_title);
+            path = (TextView) view.findViewById(R.id.text_view_song_path);
+            overflow = (ImageView) view.findViewById(R.id.image_view_song_overflow);
         }
     }
 
-    public PlaylistAdapter(Context mContext, List<Playlist> playlists) {
+    public SongAdapter(Context mContext, List<Song> songs) {
         this.mContext = mContext;
-        this.playlists = playlists;
+        this.songList = songs;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SongAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_card, parent, false);
+                .inflate(R.layout.playlist_song_item, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new SongAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Playlist album = playlists.get(position);
+    public void onBindViewHolder(final SongAdapter.MyViewHolder holder, int position) {
+        Song song = songList.get(position);
 
-        holder.title.setText(album.getTitle());
-        holder.count.setText(album.getNumOfSongs() + " songs");
+        holder.title.setText(song.getSongTitle());
+        holder.path.setText(song.getSongPath());
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        //Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,13 +67,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
             }
         });
 
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, NowPlayingActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
+//        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
     }
 
     /**
@@ -85,9 +81,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
     private void showPopupMenu(View view) {
         // inflate menu
         PopupMenu popup = new PopupMenu(mContext, view);
+
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_playlist, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+
+        popup.setOnMenuItemClickListener(new SongAdapter.MyMenuItemClickListener());
+
         popup.show();
     }
 
@@ -119,6 +118,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return playlists.size();
+        return songList.size();
     }
 }

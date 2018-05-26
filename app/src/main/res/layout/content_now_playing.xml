@@ -8,15 +8,56 @@
     tools:context=".activities.NowPlayingActivity"
     tools:showIn="@layout/activity_now_playing">
 
-    <!--Play/Pause buttons-->
+    <!-- Player Footer -->
     <LinearLayout
-        android:id="@+id/linear_layout_buttons"
+        android:id="@+id/linear_layout_player_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="bottom"
         android:orientation="vertical">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent">
+
+        </View>
+        <!-- Timer Display -->
+        <LinearLayout
+            android:id="@+id/timerDisplay"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp">
+
+            <!-- Current Duration Label -->
+            <TextView
+                android:id="@+id/text_view_current_duration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="4:59"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <!-- Total Duration Label -->
+            <TextView
+                android:id="@+id/text_view_total_duration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="10:30"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Progress Bar/Seek bar -->
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +66,7 @@
             android:paddingBottom="@dimen/default_padding"
             android:progress="25" />
 
+        <!-- Player Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +74,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/default_padding">
 
+            <!-- Add Items to Playlist Button -->
             <ImageView
                 android:id="@+id/image_view_add_items"
                 android:layout_width="0dp"
@@ -40,6 +83,7 @@
                 android:layout_weight="1"
                 android:src="@drawable/baseline_playlist_add_white_24" />
 
+            <!-- Previous Button -->
             <ImageView
                 android:id="@+id/image_view_previous"
                 android:layout_width="0dp"
@@ -48,6 +92,7 @@
                 android:layout_weight="1"
                 android:src="@drawable/baseline_skip_previous_white_36" />
 
+            <!-- Play Button -->
             <ImageView
                 android:id="@+id/image_view_play"
                 android:layout_width="0dp"
@@ -64,6 +109,7 @@
                 android:layout_weight="1"
                 android:src="@drawable/baseline_skip_next_white_36" />
 
+            <!-- Next Button -->
             <ImageView
                 android:id="@+id/image_view_repeat"
                 android:layout_width="0dp"
@@ -75,28 +121,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ScrollView
+    <!-- Playlist Items -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_playlist_songs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/linear_layout_buttons">
-
-        <!--Subject-->
-        <FrameLayout
-            android:id="@+id/frame_layout_quiz_subject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/text_view_quiz_subject"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Song X currenlty playing"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/holo_red_dark"
-                android:textStyle="bold" />
-
-        </FrameLayout>
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linear_layout_player_footer"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
 </RelativeLayout>
