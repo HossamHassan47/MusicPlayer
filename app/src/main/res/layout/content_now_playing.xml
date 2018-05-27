@@ -14,33 +14,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
         android:gravity="bottom"
         android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent">
-
-        </View>
         <!-- Timer Display -->
         <LinearLayout
             android:id="@+id/timerDisplay"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <!-- Current Duration Label -->
             <TextView
                 android:id="@+id/text_view_current_duration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_margin"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="4:59"
+                android:paddingTop="@dimen/default_padding"
+                android:text="00:59"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -49,8 +42,10 @@
                 android:id="@+id/text_view_total_duration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/default_margin"
                 android:layout_weight="1"
                 android:gravity="right"
+                android:paddingTop="@dimen/default_padding"
                 android:text="10:30"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
@@ -72,7 +67,8 @@
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:orientation="horizontal"
-            android:padding="@dimen/default_padding">
+            android:paddingTop="4dp"
+            android:paddingBottom="@dimen/default_padding">
 
             <!-- Add Items to Album Button -->
             <ImageView
