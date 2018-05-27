@@ -125,7 +125,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_playlist_songs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@id/linear_layout_player_footer"
         android:clipToPadding="false"
         android:scrollbars="vertical" />

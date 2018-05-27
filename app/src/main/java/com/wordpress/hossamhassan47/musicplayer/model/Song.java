@@ -3,14 +3,18 @@ package com.wordpress.hossamhassan47.musicplayer.model;
 public class Song {
     private String songTitle;
     private String songPath;
+    private String songArtist;
+    private String duration;
 
     public Song(){
 
     }
 
-    public Song(String title, String path) {
+    public Song(String title, String path, String artist, String duration) {
         this.songTitle = title;
         this.songPath = path;
+        this.songArtist = artist;
+        this.duration = duration;
     }
 
     public String getSongPath() {
@@ -27,5 +31,21 @@ public class Song {
 
     public void setSongTitle(String songTitle) {
         this.songTitle = songTitle;
+    }
+
+    public String getSongArtist() {
+        return songArtist;
+    }
+
+    public void setSongArtist(String songArtist) {
+        this.songArtist = songArtist;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

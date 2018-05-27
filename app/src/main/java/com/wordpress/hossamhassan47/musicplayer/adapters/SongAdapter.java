@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,15 +26,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     private List<Song> songList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, path;
-        public ImageView overflow;
+        public TextView txtSongTitle, txtDuration;
+        public LinearLayout layoutSong;
 
         public MyViewHolder(View view) {
             super(view);
 
-            title = (TextView) view.findViewById(R.id.text_view_song_title);
-            path = (TextView) view.findViewById(R.id.text_view_song_path);
-            overflow = (ImageView) view.findViewById(R.id.image_view_song_overflow);
+            txtSongTitle = (TextView) view.findViewById(R.id.text_view_song_title);
+            txtDuration = (TextView) view.findViewById(R.id.text_view_song_duration);
+            layoutSong = (LinearLayout) view.findViewById(R.id.linear_layout_song);
         }
     }
 
@@ -54,66 +55,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     public void onBindViewHolder(final SongAdapter.MyViewHolder holder, int position) {
         Song song = songList.get(position);
 
-        holder.title.setText(song.getSongTitle());
-        holder.path.setText(song.getSongPath());
+        holder.txtSongTitle.setText(song.getSongTitle());
+        holder.txtDuration.setText(song.getDuration());
 
-        // loading album cover using Glide library
-        //Glide.with(mContext).load(album.getThumbnail()).into(holder.imgThumbnail);
-
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
+        holder.layoutSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(holder.overflow);
+                Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
             }
         });
-
-//        holder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-    }
-
-    /**
-     * Showing popup menu when tapping on 3 dots
-     */
-    private void showPopupMenu(View view) {
-        // inflate menu
-        PopupMenu popup = new PopupMenu(mContext, view);
-
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_album, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new SongAdapter.MyMenuItemClickListener());
-
-        popup.show();
-    }
-
-    /**
-     * Click listener for popup menu items
-     */
-    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-
-        public MyMenuItemClickListener() {
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.action_rename:
-                    Toast.makeText(mContext, "Rename", Toast.LENGTH_SHORT).show();
-                    AddPlaylistFragment fragment = new AddPlaylistFragment();
-
-                    fragment.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog_AddPlaylistFragment");
-                    return true;
-                case R.id.action_delete:
-                    Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
-                    return true;
-                default:
-            }
-            return false;
-        }
     }
 
     @Override

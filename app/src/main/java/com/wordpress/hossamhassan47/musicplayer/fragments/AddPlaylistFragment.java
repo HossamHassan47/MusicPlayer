@@ -39,7 +39,7 @@ public class AddPlaylistFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_add_playlist, null);
 
-        // Set dialog title
+        // Set dialog txtSongTitle
         String dialogTitle = playlistName == null ? getResources().getString(R.string.dialog_title_new)
                 : getResources().getString(R.string.dialog_title_rename);
 

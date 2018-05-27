@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private AlbumAdapter albumAdapter;
 
     private List<Album> albumList;
-    public ArrayList<Song> songsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     public void fillAlbumsList() {
         // Album array list
         albumList = new ArrayList<>();
-        songsList = new ArrayList<>();
 
         ContentResolver contentResolver = getApplicationContext().getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -89,17 +87,11 @@ public class MainActivity extends AppCompatActivity {
         } else if (!cursor.moveToFirst()) {
             Toast.makeText(MainActivity.this, getResources().getString(R.string.toast_no_music), Toast.LENGTH_LONG);
         } else {
-            int title = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int path = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             int album = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
 
             do {
-                String songTitle = cursor.getString(title);
-                String songPath = cursor.getString(path);
                 String songAlbum = cursor.getString(album);
 
-                // Adding Media File Names to ListElementsArrayList.
-                songsList.add(new Song(songTitle, songPath));
                 Album playlist = new Album(songAlbum, 1, R.drawable.ic_playlist);
 
                 int alreadyExistIndex = albumList.indexOf(playlist);
