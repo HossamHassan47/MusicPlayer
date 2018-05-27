@@ -58,7 +58,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         holder.path.setText(song.getSongPath());
 
         // loading album cover using Glide library
-        //Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        //Glide.with(mContext).load(album.getThumbnail()).into(holder.imgThumbnail);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +67,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
             }
         });
 
-//        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+//        holder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //

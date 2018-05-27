@@ -9,15 +9,12 @@ import android.support.v7.widget.Toolbar;
 
 import com.wordpress.hossamhassan47.musicplayer.R;
 import com.wordpress.hossamhassan47.musicplayer.adapters.SongAdapter;
-import com.wordpress.hossamhassan47.musicplayer.helper.SongsManager;
 import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NowPlayingActivity extends AppCompatActivity {
-
-    public static final int RUNTIME_PERMISSION_CODE = 7;
 
     private RecyclerView recyclerView;
     private SongAdapter adapter;
@@ -32,7 +29,6 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         ArrayList<HashMap<String, String>> songsListData = new ArrayList<HashMap<String, String>>();
 
-        SongsManager songsManager = new SongsManager();
 
         // get all songs from sdcard
         //this.songsList = songsManager.getAllSongsList();

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--song title and artist-->
+            <!--song txtAlbumTitle and artist-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

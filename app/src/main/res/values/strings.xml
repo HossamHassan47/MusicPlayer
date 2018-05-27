@@ -24,4 +24,6 @@
     <!--Now Playing Activity-->
     <string name="title_activity_now_playing">Now Playing</string>
 
+    <string name="toast_error">Unexpected error, sorry.</string>
+    <string name="toast_no_music">No music found on SD card.</string>
 </resources>

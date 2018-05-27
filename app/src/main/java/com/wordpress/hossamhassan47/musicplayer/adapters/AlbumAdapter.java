@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wordpress.hossamhassan47.musicplayer.R;
@@ -20,15 +21,17 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
     private List<Album> albums;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail;
+        public TextView txtAlbumTitle, txtNoOfSongs;
+        public ImageView imgThumbnail;
+        public LinearLayout layoutAlbum;
 
         public MyViewHolder(View view) {
             super(view);
 
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            txtAlbumTitle = (TextView) view.findViewById(R.id.text_view_title);
+            txtNoOfSongs = (TextView) view.findViewById(R.id.text_view_no_of_songs);
+            imgThumbnail = (ImageView) view.findViewById(R.id.image_view_thumbnail);
+            layoutAlbum = (LinearLayout) view.findViewById(R.id.linear_layout_album);
         }
     }
 
@@ -47,19 +50,19 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Album album = albums.get(position);
+        final Album album = albums.get(position);
 
-        holder.title.setText(album.getTitle());
-        holder.count.setText(album.getNumOfSongs() + " songs");
+        holder.txtAlbumTitle.setText(album.getTitle());
+        holder.txtNoOfSongs.setText(album.getNumOfSongs() + " songs");
 
-        holder.thumbnail.setImageResource(album.getThumbnail());
-        // loading album cover using Glide library
-        //Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        holder.imgThumbnail.setImageResource(album.getThumbnail());
 
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+        holder.layoutAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, NowPlayingActivity.class);
+                intent.putExtra("albumTitle", album.getTitle());
+
                 mContext.startActivity(intent);
             }
         });

@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,21 +22,20 @@ import android.widget.Toast;
 
 import com.wordpress.hossamhassan47.musicplayer.R;
 import com.wordpress.hossamhassan47.musicplayer.adapters.AlbumAdapter;
-import com.wordpress.hossamhassan47.musicplayer.fragments.AddPlaylistFragment;
-import com.wordpress.hossamhassan47.musicplayer.fragments.NoticeDialogListener;
 import com.wordpress.hossamhassan47.musicplayer.model.Album;
 import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
-import static com.wordpress.hossamhassan47.musicplayer.activities.NowPlayingActivity.RUNTIME_PERMISSION_CODE;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity implements NoticeDialogListener {
+    public static final int RUNTIME_PERMISSION_CODE = 7;
 
     private RecyclerView recyclerView;
-    private AlbumAdapter adapter;
+    private AlbumAdapter albumAdapter;
 
     private List<Album> albumList;
     public ArrayList<Song> songsList;
@@ -49,36 +47,37 @@ public class MainActivity extends AppCompatActivity implements NoticeDialogListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Set activity title to Playlists
+        // Set activity txtAlbumTitle to Playlists
         setTitle(getResources().getString(R.string.title_albums));
 
+        // Requesting run time permission for Read External Storage.
+        androidRuntimePermission();
+
+        // Get Album list
+        fillAlbumsList();
+
         // Get Recycler View
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_albums);
 
-        // Album array list
-        albumList = new ArrayList<>();
-        songsList = new ArrayList<>();
-
-        // Album adapter
-        adapter = new AlbumAdapter(this, albumList);
+        // Album albumAdapter
+        albumAdapter = new AlbumAdapter(this, albumList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-
-        // Requesting run time permission for Read External Storage.
-        androidRuntimePermission();
-
-        getAllMediaMp3Files();
+        recyclerView.setAdapter(albumAdapter);
     }
 
-    public void getAllMediaMp3Files() {
+    public void fillAlbumsList() {
+        // Album array list
+        albumList = new ArrayList<>();
+        songsList = new ArrayList<>();
+
         ContentResolver contentResolver = getApplicationContext().getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = contentResolver.query(
-                uri, // Uri
+                uri,
                 null,
                 null,
                 null,
@@ -86,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements NoticeDialogListe
         );
 
         if (cursor == null) {
-            Toast.makeText(MainActivity.this, "Something Went Wrong.", Toast.LENGTH_LONG);
+            Toast.makeText(MainActivity.this, getResources().getString(R.string.toast_error), Toast.LENGTH_LONG);
         } else if (!cursor.moveToFirst()) {
-            Toast.makeText(MainActivity.this, "No Music Found on SD Card.", Toast.LENGTH_LONG);
+            Toast.makeText(MainActivity.this, getResources().getString(R.string.toast_no_music), Toast.LENGTH_LONG);
         } else {
             int title = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int path = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
@@ -106,12 +105,20 @@ public class MainActivity extends AppCompatActivity implements NoticeDialogListe
                 int alreadyExistIndex = albumList.indexOf(playlist);
                 if (alreadyExistIndex < 0) {
                     albumList.add(playlist);
-                }else{
+                } else {
                     albumList.get(alreadyExistIndex).incrementNumOfSongs();
                 }
 
             } while (cursor.moveToNext());
         }
+
+        // Sort Albums by txtAlbumTitle
+        Collections.sort(albumList, new Comparator<Album>() {
+            @Override
+            public int compare(Album o1, Album o2) {
+                return o1.getTitle().compareTo(o2.getTitle());
+            }
+        });
     }
 
 
@@ -149,58 +156,30 @@ public class MainActivity extends AppCompatActivity implements NoticeDialogListe
         switch (requestCode) {
             case RUNTIME_PERMISSION_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                    fillAlbumsList();
+                    albumAdapter.notifyDataSetChanged();
                 } else {
-
+                    Toast.makeText(getApplicationContext(), "Access denied.", Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
 
-    /**
-     * Adding few albumList for testing
-     */
-    private void preparePlaylists() {
-        Random random = new Random();
-
-        for (int i = 0; i < 10; i++) {
-            Album a = new Album("Album " + (i + 1), random.nextInt(100), R.drawable.ic_playlist);
-            albumList.add(a);
-        }
-
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-
-        Album a = new Album("Album New", 0, R.drawable.ic_playlist);
-        albumList.add(a);
-
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
+            fillAlbumsList();
+            albumAdapter.notifyDataSetChanged();
+
+            Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
             return true;
         }
 
