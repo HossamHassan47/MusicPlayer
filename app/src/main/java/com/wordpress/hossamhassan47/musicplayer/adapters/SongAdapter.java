@@ -45,7 +45,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     @Override
     public SongAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_song_item, parent, false);
+                .inflate(R.layout.song_card, parent, false);
 
         return new SongAdapter.MyViewHolder(itemView);
     }
@@ -83,7 +83,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         PopupMenu popup = new PopupMenu(mContext, view);
 
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_playlist, popup.getMenu());
+        inflater.inflate(R.menu.menu_album, popup.getMenu());
 
         popup.setOnMenuItemClickListener(new SongAdapter.MyMenuItemClickListener());
 

@@ -74,7 +74,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/default_padding">
 
-            <!-- Add Items to Playlist Button -->
+            <!-- Add Items to Album Button -->
             <ImageView
                 android:id="@+id/image_view_add_items"
                 android:layout_width="0dp"
@@ -121,7 +121,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Playlist Items -->
+    <!-- Album Items -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_playlist_songs"
         android:layout_width="match_parent"

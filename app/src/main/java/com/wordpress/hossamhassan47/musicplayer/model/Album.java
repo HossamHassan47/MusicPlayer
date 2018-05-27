@@ -1,14 +1,14 @@
 package com.wordpress.hossamhassan47.musicplayer.model;
 
-public class Playlist {
+public class Album {
     private String title;
     private int numOfSongs;
     private int thumbnail;
 
-    public Playlist() {
+    public Album() {
     }
 
-    public Playlist(String title, int numOfSongs, int thumbnail) {
+    public Album(String title, int numOfSongs, int thumbnail) {
         this.title = title;
         this.numOfSongs = numOfSongs;
         this.thumbnail = thumbnail;
@@ -36,5 +36,18 @@ public class Playlist {
 
     public void setThumbnail(int thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public void incrementNumOfSongs(){
+        numOfSongs++;
+    }
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.title.equalsIgnoreCase(((Album)obj).getTitle());
     }
 }
