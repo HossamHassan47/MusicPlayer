@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             do {
                 String songAlbum = cursor.getString(album);
 
-                Album playlist = new Album(songAlbum, 1, R.drawable.ic_playlist);
+                Album playlist = new Album(songAlbum, 1, R.drawable.ic_album);
 
                 int alreadyExistIndex = albumList.indexOf(playlist);
                 if (alreadyExistIndex < 0) {
