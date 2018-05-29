@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.wordpress.hossamhassan47.musicplayer.R;
 import com.wordpress.hossamhassan47.musicplayer.activities.MainActivity;
 import com.wordpress.hossamhassan47.musicplayer.fragments.AddPlaylistFragment;
+import com.wordpress.hossamhassan47.musicplayer.helper.Utilities;
 import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
 import java.util.List;
@@ -51,12 +52,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         return new SongAdapter.MyViewHolder(itemView);
     }
 
+    private Utilities utils = new Utilities();
+
     @Override
     public void onBindViewHolder(final SongAdapter.MyViewHolder holder, int position) {
         Song song = songList.get(position);
 
         holder.txtSongTitle.setText(song.getSongTitle());
-        holder.txtDuration.setText(song.getDuration());
+        holder.txtDuration.setText("" + utils.milliSecondsToTimer(Long.valueOf(song.getDuration())));
 
         holder.layoutSong.setOnClickListener(new View.OnClickListener() {
             @Override

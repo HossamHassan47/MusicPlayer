@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wordpress.hossamhassan47.musicplayer.R;
@@ -23,15 +25,40 @@ import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
-public class NowPlayingActivity extends AppCompatActivity  implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener{
+public class NowPlayingActivity extends AppCompatActivity
+        implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
 
-    String albumTitle;
+    // Play settings
+    private String albumTitle;
+    private int currentSongIndex = 0;
+    private boolean isShuffle = false;
+    private boolean isRepeat = false;
+
+    // Duration
+    private TextView txtCurrentDuration;
+    private TextView txtTotalDuration;
+
+    // Seek Bar
+    private SeekBar seekBar;
+
+    // Play buttons
+    private ImageView btnRepeat;
+    private ImageView btnPrevious;
+    private ImageView btnPlay;
+    private ImageView btnNext;
+    private ImageView btnShuffle;
+
+    // Media Player
+    private MediaPlayer mediaPlayer;
+    private Handler mHandler = new Handler();
+    private Utilities utils;
+
+    // Songs List & Adapter
     private RecyclerView recyclerView;
     private SongAdapter songAdapter;
     public ArrayList<Song> songsList;
-
-    Utilities utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,31 +67,139 @@ public class NowPlayingActivity extends AppCompatActivity  implements MediaPlaye
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        albumTitle = getIntent().getExtras().getString("albumTitle","");
+        albumTitle = getIntent().getExtras().getString("albumTitle", "");
         setTitle(albumTitle);
 
+        // List Album Songs
         fillSongsList();
 
-        // Mediaplayer
-        mp = new MediaPlayer();
+        // Media player
+        mediaPlayer = new MediaPlayer();
+
         utils = new Utilities();
 
+        // Find Controls
+        btnRepeat = (ImageView) findViewById(R.id.image_view_repeat);
+        btnPrevious = (ImageView) findViewById(R.id.image_view_previous);
         btnPlay = (ImageView) findViewById(R.id.image_view_play);
-        btnPlay .setOnClickListener(new View.OnClickListener() {
+        btnNext = (ImageView) findViewById(R.id.image_view_next);
+        btnShuffle = (ImageView) findViewById(R.id.image_view_shuffle);
+
+        seekBar = (SeekBar) findViewById(R.id.seekBarSong);
+
+        txtCurrentDuration = (TextView) findViewById(R.id.text_view_current_duration);
+        txtTotalDuration = (TextView) findViewById(R.id.text_view_total_duration);
+
+        // Seek Bar & Media Player Listeners
+        seekBar.setOnSeekBarChangeListener(this);
+        mediaPlayer.setOnCompletionListener(this);
+
+        // By default play first song
+        playSong(0);
+
+        // Play button
+        btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                playSong(0);
+
+                // check for already playing
+                if (mediaPlayer.isPlaying()) {
+                    if (mediaPlayer != null) {
+                        mediaPlayer.pause();
+
+                        // Changing button image to play button
+                        btnPlay.setImageResource(R.drawable.baseline_play_circle_outline_white_48);
+                    }
+                } else {
+                    // Resume song
+                    if (mediaPlayer != null) {
+                        mediaPlayer.start();
+                        // Changing button image to pause button
+                        btnPlay.setImageResource(R.drawable.baseline_pause_circle_outline_white_48);
+                    }
+                }
             }
         });
 
-        // Get Recycler View
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_playlist_songs);
+        // Previous button
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (currentSongIndex > 0) {
+                    // Previous song
+                    currentSongIndex -= 1;
+                } else {
+                    // Last Song
+                    currentSongIndex = songsList.size() - 1;
+                }
 
-        // Album songAdapter
+                playSong(currentSongIndex);
+            }
+        });
+
+        // Previous button
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (currentSongIndex < (songsList.size() - 1)) {
+                    // Next song
+                    currentSongIndex += 1;
+                } else {
+                    // First Song
+                    currentSongIndex = 0;
+                }
+
+                playSong(currentSongIndex);
+            }
+        });
+
+        // Repeat button
+        btnRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (isRepeat) {
+                    isRepeat = false;
+
+                    Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
+
+                    btnRepeat.setImageResource(R.drawable.ic_action_repeat_off);
+                } else {
+                    isRepeat = true;
+
+                    Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
+
+                    btnRepeat.setImageResource(R.drawable.ic_action_repeat_on);
+                }
+            }
+        });
+
+        // Shuffle button
+        btnShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (isShuffle) {
+                    isShuffle = false;
+
+                    Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
+
+                    btnShuffle.setImageResource(R.drawable.ic_action_shuffle_off);
+                } else {
+                    isShuffle = true;
+
+                    Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
+
+                    btnShuffle.setImageResource(R.drawable.ic_action_shuffle_on);
+                }
+            }
+        });
+
+        // Songs Adapter
         songAdapter = new SongAdapter(this, songsList);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        // Songs Recycler View
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_playlist_songs);
 
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(songAdapter);
@@ -72,13 +207,16 @@ public class NowPlayingActivity extends AppCompatActivity  implements MediaPlaye
         songAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Method to list all Album songs
+     */
     public void fillSongsList() {
         songsList = new ArrayList<>();
 
         ContentResolver contentResolver = getApplicationContext().getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
-        String[] column = { MediaStore.Audio.Media.DATA,
+        String[] column = {MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Audio.Media.MIME_TYPE,
@@ -88,7 +226,7 @@ public class NowPlayingActivity extends AppCompatActivity  implements MediaPlaye
 
         String where = android.provider.MediaStore.Audio.Media.ALBUM + "=?";
 
-        String whereVal[] = { albumTitle };
+        String whereVal[] = {albumTitle};
 
         String orderBy = android.provider.MediaStore.Audio.Media.TITLE;
 
@@ -111,35 +249,28 @@ public class NowPlayingActivity extends AppCompatActivity  implements MediaPlaye
         }
     }
 
-    // Media Player
-    private MediaPlayer mp;
-    private ImageView btnPlay;
-
     /**
-     * Function to play a song
-     * @param songIndex - index of song
-     * */
-    public void  playSong(int songIndex){
-        // Play song
+     * Method to play a song
+     */
+    public void playSong(int songIndex) {
         try {
-            mp.reset();
-            mp.setDataSource(songsList.get(songIndex).getSongPath());
-            mp.prepare();
-            mp.start();
-
-            // Displaying Song title
-            //String songTitle = songsList.get(songIndex).get("songTitle");
-            //songTitleLabel.setText(songTitle);
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(songsList.get(songIndex).getSongPath());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
 
             // Changing Button Image to pause image
             btnPlay.setImageResource(R.drawable.baseline_pause_circle_outline_white_48);
 
-            // set Progress bar values
-            //songProgressBar.setProgress(0);
-            //songProgressBar.setMax(100);
+            // Set seek bar values
+            seekBar.setProgress(0);
+            seekBar.setMax(100);
+
+            // Display current playing song title
+            setTitle(songsList.get(currentSongIndex).getSongTitle());
 
             // Updating progress bar
-            //updateProgressBar();
+            updateProgressBar();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -149,9 +280,59 @@ public class NowPlayingActivity extends AppCompatActivity  implements MediaPlaye
         }
     }
 
+    /**
+     * Update timer on seekbar
+     */
+    public void updateProgressBar() {
+        mHandler.postDelayed(mUpdateTimeTask, 100);
+    }
+
+    /**
+     * Background Runnable thread
+     */
+    private Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+            long totalDuration = mediaPlayer.getDuration();
+            long currentDuration = mediaPlayer.getCurrentPosition();
+
+            // Displaying Total Duration time
+            txtTotalDuration.setText("" + utils.milliSecondsToTimer(totalDuration));
+
+            // Displaying time completed playing
+            txtCurrentDuration.setText("" + utils.milliSecondsToTimer(currentDuration));
+
+            // Updating progress bar
+            int progress = (int) (utils.getProgressPercentage(currentDuration, totalDuration));
+            seekBar.setProgress(progress);
+
+            // Running this thread after 100 milliseconds
+            mHandler.postDelayed(this, 100);
+        }
+    };
+
     @Override
     public void onCompletion(MediaPlayer mp) {
+        // check for repeat is ON or OFF
+        if (isRepeat) {
+            // repeat is on play same song again
+            playSong(currentSongIndex);
+        } else if (isShuffle) {
+            // shuffle is on - play a random song
+            Random rand = new Random();
+            currentSongIndex = rand.nextInt(songsList.size() - 1);
 
+            playSong(currentSongIndex);
+        } else {
+            // no repeat or shuffle ON - play next song
+            if (currentSongIndex < (songsList.size() - 1)) {
+                currentSongIndex += 1;
+            } else {
+                // play first song
+                currentSongIndex = 0;
+            }
+
+            playSong(currentSongIndex);
+        }
     }
 
     @Override
@@ -161,11 +342,29 @@ public class NowPlayingActivity extends AppCompatActivity  implements MediaPlaye
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
+        // remove message Handler from updating progress bar
+        mHandler.removeCallbacks(mUpdateTimeTask);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        mHandler.removeCallbacks(mUpdateTimeTask);
+        int totalDuration = mediaPlayer.getDuration();
+        int currentPosition = utils.progressToTimer(seekBar.getProgress(), totalDuration);
 
+        // forward or backward to certain seconds
+        mediaPlayer.seekTo(currentPosition);
+
+        // update timer progress again
+        updateProgressBar();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mHandler.removeCallbacks(mUpdateTimeTask);
+
+        mediaPlayer.release();
     }
 }

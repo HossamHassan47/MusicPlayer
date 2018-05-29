@@ -54,12 +54,10 @@
 
         <!-- Progress Bar/Seek bar -->
         <SeekBar
+            android:id="@+id/seekBarSong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="100"
-            android:min="0"
-            android:paddingBottom="@dimen/default_padding"
-            android:progress="25" />
+            android:paddingBottom="@dimen/default_padding" />
 
         <!-- Player Buttons -->
         <LinearLayout
@@ -67,17 +65,18 @@
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:orientation="horizontal"
-            android:paddingTop="4dp"
-            android:paddingBottom="@dimen/default_padding">
+            android:paddingBottom="@dimen/default_padding"
+            android:paddingTop="4dp">
 
             <!-- Add Items to Album Button -->
             <ImageView
-                android:id="@+id/image_view_add_items"
+                android:id="@+id/image_view_repeat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:src="@drawable/baseline_playlist_add_white_24" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_action_repeat_off" />
 
             <!-- Previous Button -->
             <ImageView
@@ -86,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/baseline_skip_previous_white_36" />
 
             <!-- Play Button -->
@@ -95,24 +95,28 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/baseline_play_circle_outline_white_48" />
 
+            <!-- Next Button -->
             <ImageView
                 android:id="@+id/image_view_next"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/baseline_skip_next_white_36" />
 
-            <!-- Next Button -->
+            <!-- Shuffle Button -->
             <ImageView
-                android:id="@+id/image_view_repeat"
+                android:id="@+id/image_view_shuffle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:src="@drawable/baseline_repeat_white_24" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_action_shuffle_off" />
 
         </LinearLayout>
     </LinearLayout>
