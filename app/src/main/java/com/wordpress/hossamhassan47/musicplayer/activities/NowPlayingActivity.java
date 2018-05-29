@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wordpress.hossamhassan47.musicplayer.R;
+import com.wordpress.hossamhassan47.musicplayer.adapters.RecyclerItemClickListener;
 import com.wordpress.hossamhassan47.musicplayer.adapters.SongAdapter;
 import com.wordpress.hossamhassan47.musicplayer.helper.Utilities;
 import com.wordpress.hossamhassan47.musicplayer.model.Song;
@@ -33,8 +34,10 @@ public class NowPlayingActivity extends AppCompatActivity
     // Play settings
     private String albumTitle;
     private int currentSongIndex = 0;
+    private int previousSongIndex = 0;
     private boolean isShuffle = false;
     private boolean isRepeat = false;
+    private boolean isStarted = false;
 
     // Duration
     private TextView txtCurrentDuration;
@@ -57,6 +60,7 @@ public class NowPlayingActivity extends AppCompatActivity
 
     // Songs List & Adapter
     private RecyclerView recyclerView;
+    RecyclerView.LayoutManager mLayoutManager;
     private SongAdapter songAdapter;
     public ArrayList<Song> songsList;
 
@@ -94,13 +98,14 @@ public class NowPlayingActivity extends AppCompatActivity
         seekBar.setOnSeekBarChangeListener(this);
         mediaPlayer.setOnCompletionListener(this);
 
-        // By default play first song
-        playSong(0);
-
         // Play button
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                if (!isStarted) {
+                    playSong(0);
+                    return;
+                }
 
                 // check for already playing
                 if (mediaPlayer.isPlaying()) {
@@ -125,31 +130,33 @@ public class NowPlayingActivity extends AppCompatActivity
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                int songIndex;
                 if (currentSongIndex > 0) {
                     // Previous song
-                    currentSongIndex -= 1;
+                    songIndex = currentSongIndex - 1;
                 } else {
                     // Last Song
-                    currentSongIndex = songsList.size() - 1;
+                    songIndex = songsList.size() - 1;
                 }
 
-                playSong(currentSongIndex);
+                playSong(songIndex);
             }
         });
 
-        // Previous button
+        // Next button
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                int songIndex;
                 if (currentSongIndex < (songsList.size() - 1)) {
                     // Next song
-                    currentSongIndex += 1;
+                    songIndex = currentSongIndex + 1;
                 } else {
                     // First Song
-                    currentSongIndex = 0;
+                    songIndex = 0;
                 }
 
-                playSong(currentSongIndex);
+                playSong(songIndex);
             }
         });
 
@@ -161,13 +168,11 @@ public class NowPlayingActivity extends AppCompatActivity
                     isRepeat = false;
 
                     Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
-
                     btnRepeat.setImageResource(R.drawable.ic_action_repeat_off);
                 } else {
                     isRepeat = true;
 
                     Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
-
                     btnRepeat.setImageResource(R.drawable.ic_action_repeat_on);
                 }
             }
@@ -181,13 +186,11 @@ public class NowPlayingActivity extends AppCompatActivity
                     isShuffle = false;
 
                     Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
-
                     btnShuffle.setImageResource(R.drawable.ic_action_shuffle_off);
                 } else {
                     isShuffle = true;
 
                     Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
-
                     btnShuffle.setImageResource(R.drawable.ic_action_shuffle_on);
                 }
             }
@@ -199,10 +202,20 @@ public class NowPlayingActivity extends AppCompatActivity
         // Songs Recycler View
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_playlist_songs);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(songAdapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(),
+                        recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        playSong(position);
+                    }
+                })
+        );
 
         songAdapter.notifyDataSetChanged();
     }
@@ -254,6 +267,14 @@ public class NowPlayingActivity extends AppCompatActivity
      */
     public void playSong(int songIndex) {
         try {
+            previousSongIndex = currentSongIndex;
+            currentSongIndex = songIndex;
+
+            isStarted = true;
+
+            songsList.get(previousSongIndex).setPlaying(false);
+            songsList.get(songIndex).setPlaying(true);
+
             mediaPlayer.reset();
             mediaPlayer.setDataSource(songsList.get(songIndex).getSongPath());
             mediaPlayer.prepare();
@@ -271,6 +292,10 @@ public class NowPlayingActivity extends AppCompatActivity
 
             // Updating progress bar
             updateProgressBar();
+
+            mLayoutManager.scrollToPosition(songIndex);
+
+            songAdapter.notifyDataSetChanged();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -319,19 +344,18 @@ public class NowPlayingActivity extends AppCompatActivity
         } else if (isShuffle) {
             // shuffle is on - play a random song
             Random rand = new Random();
-            currentSongIndex = rand.nextInt(songsList.size() - 1);
-
-            playSong(currentSongIndex);
+            playSong(rand.nextInt(songsList.size() - 1));
         } else {
             // no repeat or shuffle ON - play next song
+            int songIndex;
             if (currentSongIndex < (songsList.size() - 1)) {
-                currentSongIndex += 1;
+                songIndex = currentSongIndex + 1;
             } else {
                 // play first song
-                currentSongIndex = 0;
+                songIndex = 0;
             }
 
-            playSong(currentSongIndex);
+            playSong(songIndex);
         }
     }
 

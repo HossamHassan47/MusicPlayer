@@ -1,21 +1,17 @@
 package com.wordpress.hossamhassan47.musicplayer.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.wordpress.hossamhassan47.musicplayer.R;
-import com.wordpress.hossamhassan47.musicplayer.activities.MainActivity;
-import com.wordpress.hossamhassan47.musicplayer.fragments.AddPlaylistFragment;
 import com.wordpress.hossamhassan47.musicplayer.helper.Utilities;
 import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
@@ -25,10 +21,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
     private Context mContext;
     private List<Song> songList;
+    private Utilities utils = new Utilities();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView txtSongTitle, txtDuration;
         public LinearLayout layoutSong;
+        public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
@@ -36,6 +34,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
             txtSongTitle = (TextView) view.findViewById(R.id.text_view_song_title);
             txtDuration = (TextView) view.findViewById(R.id.text_view_song_duration);
             layoutSong = (LinearLayout) view.findViewById(R.id.linear_layout_song);
+            thumbnail = (ImageView) view.findViewById(R.id.image_view_thumbnail);
         }
     }
 
@@ -52,10 +51,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         return new SongAdapter.MyViewHolder(itemView);
     }
 
-    private Utilities utils = new Utilities();
-
     @Override
-    public void onBindViewHolder(final SongAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Song song = songList.get(position);
 
         holder.txtSongTitle.setText(song.getSongTitle());
@@ -64,9 +61,20 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         holder.layoutSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+        if (song.isPlaying()) {
+
+            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(holder.thumbnail);
+            Glide.with(mContext).load(R.raw.gif_playing_song).into(imageViewTarget);
+
+            //holder.thumbnail.setImageResource(R.drawable.baseline_play_circle_outline_white_48);
+        } else {
+            holder.thumbnail.setImageResource(R.drawable.ic_song);
+
+        }
     }
 
     @Override

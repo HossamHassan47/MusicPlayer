@@ -5,6 +5,7 @@ public class Song {
     private String songPath;
     private String songArtist;
     private String duration;
+    private boolean isPlaying;
 
     public Song(){
 
@@ -47,5 +48,13 @@ public class Song {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
     }
 }
