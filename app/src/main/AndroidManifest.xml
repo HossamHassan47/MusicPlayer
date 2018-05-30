@@ -25,6 +25,7 @@
         <activity
             android:name=".activities.NowPlayingActivity"
             android:label="@string/title_activity_now_playing"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
