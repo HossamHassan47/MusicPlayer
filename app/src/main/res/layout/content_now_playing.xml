@@ -8,13 +8,13 @@
     tools:context=".activities.NowPlayingActivity"
     tools:showIn="@layout/activity_now_playing">
 
-    <!-- Player Footer -->
+    <!-- Play Footer -->
     <LinearLayout
         android:id="@+id/linear_layout_player_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         android:gravity="bottom"
         android:orientation="vertical">
 
@@ -33,7 +33,6 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:paddingTop="@dimen/default_padding"
-                android:text="00:59"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -46,7 +45,6 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:paddingTop="@dimen/default_padding"
-                android:text="10:30"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -59,7 +57,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/default_padding" />
 
-        <!-- Player Buttons -->
+        <!-- Play Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +66,7 @@
             android:paddingBottom="@dimen/default_padding"
             android:paddingTop="4dp">
 
-            <!-- Add Items to Album Button -->
+            <!-- Repeat Button-->
             <ImageView
                 android:id="@+id/image_view_repeat"
                 android:layout_width="0dp"
@@ -121,7 +119,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Album Items -->
+    <!-- Songs Recycler View -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_playlist_songs"
         android:layout_width="match_parent"

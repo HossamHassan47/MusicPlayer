@@ -16,6 +16,9 @@ import com.wordpress.hossamhassan47.musicplayer.model.Album;
 
 import java.util.List;
 
+/**
+ * Adapter that used to list all Albums
+ */
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
     private Context mContext;
     private List<Album> albums;
@@ -54,7 +57,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
         holder.txtAlbumTitle.setText(album.getTitle());
         holder.txtNoOfSongs.setText(album.getNumOfSongs() + " songs");
-
         holder.imgThumbnail.setImageResource(album.getThumbnail());
 
         holder.layoutAlbum.setOnClickListener(new View.OnClickListener() {

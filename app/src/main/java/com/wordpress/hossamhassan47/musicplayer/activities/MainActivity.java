@@ -30,13 +30,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Main Activity that used to display all songs albums from SD Card
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final int RUNTIME_PERMISSION_CODE = 7;
 
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
-
     private List<Album> albumList;
 
     @Override
@@ -68,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(albumAdapter);
     }
 
+    /**
+     * Method that used to fill the albums list.
+     */
     public void fillAlbumsList() {
         // Album array list
         albumList = new ArrayList<>();
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             } while (cursor.moveToNext());
         }
 
-        // Sort Albums by txtAlbumTitle
+        // Sort Albums by Title
         Collections.sort(albumList, new Comparator<Album>() {
             @Override
             public int compare(Album o1, Album o2) {
@@ -113,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    // Creating Runtime permission function.
+    /**
+     * Method that used to Creating Runtime permission for External Storage
+     */
     public void androidRuntimePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -168,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
+            // Refresh Albums list
             fillAlbumsList();
+
             albumAdapter.notifyDataSetChanged();
 
             Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
@@ -177,5 +185,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

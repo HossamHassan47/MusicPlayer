@@ -2,6 +2,7 @@ package com.wordpress.hossamhassan47.musicplayer.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,10 @@ import com.wordpress.hossamhassan47.musicplayer.model.Song;
 
 import java.util.List;
 
+/**
+ * Adapter that used to list selected album songs
+ */
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> {
-
     private Context mContext;
     private List<Song> songList;
     private Utilities utils = new Utilities();
@@ -65,15 +68,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
             }
         });
 
-        if (song.isPlaying()) {
+        //Log.v("Adapter", "Is Playing: " + song.isPlaying());
+        //Log.v("Adapter", "Is Paused: " + song.isPaused());
 
+        if (song.isPaused()) {
+            // Display paused icon
+            holder.thumbnail.setImageResource(R.drawable.ic_song_paused);
+        } else if (song.isPlaying()) {
+            // Display playing gif image
             GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(holder.thumbnail);
             Glide.with(mContext).load(R.raw.gif_playing_song).into(imageViewTarget);
-
-            //holder.thumbnail.setImageResource(R.drawable.baseline_play_circle_outline_white_48);
         } else {
+            // Display default song icon
             holder.thumbnail.setImageResource(R.drawable.ic_song);
-
         }
     }
 

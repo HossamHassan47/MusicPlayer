@@ -1,5 +1,13 @@
 package com.wordpress.hossamhassan47.musicplayer.helper;
 
+/**
+ * Helper Class that used to:
+ *
+ * Convert song duration to time format
+ * Get progress percentage
+ * And change progress to time
+ *
+ */
 public class Utilities {
     /**
      * Function to convert milliseconds time to
@@ -14,6 +22,7 @@ public class Utilities {
         int hours = (int) (milliseconds / (1000 * 60 * 60));
         int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
         int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+
         // Add hours if there
         if (hours > 0) {
             finalTimerString = hours + ":";
@@ -65,5 +74,4 @@ public class Utilities {
         // return current duration in milliseconds
         return currentDuration * 1000;
     }
-
 }

@@ -1,11 +1,15 @@
 package com.wordpress.hossamhassan47.musicplayer.model;
 
+/**
+ * Model class for Song details
+ */
 public class Song {
     private String songTitle;
     private String songPath;
     private String songArtist;
     private String duration;
     private boolean isPlaying;
+    private boolean isPaused;
 
     public Song(){
 
@@ -56,5 +60,13 @@ public class Song {
 
     public void setPlaying(boolean playing) {
         isPlaying = playing;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
     }
 }

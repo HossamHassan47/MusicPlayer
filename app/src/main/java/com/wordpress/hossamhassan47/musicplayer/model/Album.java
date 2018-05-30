@@ -1,5 +1,8 @@
 package com.wordpress.hossamhassan47.musicplayer.model;
 
+/**
+ * Model class for Album details
+ */
 public class Album {
     private String title;
     private int numOfSongs;
@@ -41,6 +44,7 @@ public class Album {
     public void incrementNumOfSongs(){
         numOfSongs++;
     }
+
     @Override
     public int hashCode() {
         return super.hashCode();
