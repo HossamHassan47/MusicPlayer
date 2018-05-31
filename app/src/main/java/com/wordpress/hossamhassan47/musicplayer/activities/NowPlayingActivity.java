@@ -445,15 +445,6 @@ public class NowPlayingActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-
-        // Release media player
-        mHandler.removeCallbacks(mUpdateTimeTask);
-        this.releaseMediaPlayer();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
