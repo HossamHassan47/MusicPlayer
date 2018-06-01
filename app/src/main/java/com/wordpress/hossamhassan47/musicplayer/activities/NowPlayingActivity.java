@@ -32,9 +32,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Now Playing activity that used to list selected album songs
- *
+ * <p>
  * User can play, pause, skip to previous or next song.
  */
 public class NowPlayingActivity extends AppCompatActivity
@@ -49,18 +53,26 @@ public class NowPlayingActivity extends AppCompatActivity
     private boolean isStarted = false;
 
     // Duration
-    private TextView txtCurrentDuration;
-    private TextView txtTotalDuration;
+    @BindView(R.id.text_view_current_duration)
+    TextView txtCurrentDuration;
+    @BindView(R.id.text_view_total_duration)
+    TextView txtTotalDuration;
 
     // Seek Bar
-    private SeekBar seekBar;
+    @BindView(R.id.seekBarSong)
+    SeekBar seekBar;
 
     // Play buttons
-    private ImageView btnRepeat;
-    private ImageView btnPrevious;
-    private ImageView btnPlay;
-    private ImageView btnNext;
-    private ImageView btnShuffle;
+    @BindView(R.id.image_view_repeat)
+    ImageView btnRepeat;
+    @BindView(R.id.image_view_previous)
+    ImageView btnPrevious;
+    @BindView(R.id.image_view_play)
+    ImageView btnPlay;
+    @BindView(R.id.image_view_next)
+    ImageView btnNext;
+    @BindView(R.id.image_view_shuffle)
+    ImageView btnShuffle;
 
     // Media Player
     private MediaPlayer mediaPlayer;
@@ -98,11 +110,17 @@ public class NowPlayingActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
+
+        // Bind views
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set album title
         albumTitle = getIntent().getExtras().getString("albumTitle", "");
         setTitle(albumTitle);
 
@@ -115,125 +133,9 @@ public class NowPlayingActivity extends AppCompatActivity
 
         utils = new Utilities();
 
-        // Find Controls
-        btnRepeat = (ImageView) findViewById(R.id.image_view_repeat);
-        btnPrevious = (ImageView) findViewById(R.id.image_view_previous);
-        btnPlay = (ImageView) findViewById(R.id.image_view_play);
-        btnNext = (ImageView) findViewById(R.id.image_view_next);
-        btnShuffle = (ImageView) findViewById(R.id.image_view_shuffle);
-
-        seekBar = (SeekBar) findViewById(R.id.seekBarSong);
-
-        txtCurrentDuration = (TextView) findViewById(R.id.text_view_current_duration);
-        txtTotalDuration = (TextView) findViewById(R.id.text_view_total_duration);
-
         // Seek Bar & Media Player Listeners
         seekBar.setOnSeekBarChangeListener(this);
         mediaPlayer.setOnCompletionListener(this);
-
-        // Play button
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (!isStarted) {
-                    playSong(0);
-                    return;
-                }
-
-                // check for already playing
-                if (mediaPlayer.isPlaying()) {
-                    if (mediaPlayer != null) {
-                        mediaPlayer.pause();
-
-                        songsList.get(currentSongIndex).setPaused(true);
-
-                        // Changing button image to play button
-                        btnPlay.setImageResource(R.drawable.baseline_play_circle_outline_white_48);
-                    }
-                } else {
-                    // Resume song
-                    if (mediaPlayer != null) {
-                        mediaPlayer.start();
-                        songsList.get(currentSongIndex).setPaused(false);
-
-                        // Changing button image to pause button
-                        btnPlay.setImageResource(R.drawable.baseline_pause_circle_outline_white_48);
-                    }
-                }
-
-                songAdapter.notifyDataSetChanged();
-            }
-        });
-
-        // Previous button
-        btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                int songIndex;
-                if (currentSongIndex > 0) {
-                    // Previous song
-                    songIndex = currentSongIndex - 1;
-                } else {
-                    // Last Song
-                    songIndex = songsList.size() - 1;
-                }
-
-                playSong(songIndex);
-            }
-        });
-
-        // Next button
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                int songIndex;
-                if (currentSongIndex < (songsList.size() - 1)) {
-                    // Next song
-                    songIndex = currentSongIndex + 1;
-                } else {
-                    // First Song
-                    songIndex = 0;
-                }
-
-                playSong(songIndex);
-            }
-        });
-
-        // Repeat button
-        btnRepeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (isRepeat) {
-                    isRepeat = false;
-
-                    Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
-                    btnRepeat.setImageResource(R.drawable.ic_action_repeat_off);
-                } else {
-                    isRepeat = true;
-
-                    Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
-                    btnRepeat.setImageResource(R.drawable.ic_action_repeat_on);
-                }
-            }
-        });
-
-        // Shuffle button
-        btnShuffle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (isShuffle) {
-                    isShuffle = false;
-
-                    Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
-                    btnShuffle.setImageResource(R.drawable.ic_action_shuffle_off);
-                } else {
-                    isShuffle = true;
-
-                    Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
-                    btnShuffle.setImageResource(R.drawable.ic_action_shuffle_on);
-                }
-            }
-        });
 
         // Songs Adapter
         songAdapter = new SongAdapter(this, songsList);
@@ -257,6 +159,120 @@ public class NowPlayingActivity extends AppCompatActivity
         );
 
         songAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Play click
+     *
+     * @param view
+     */
+    @OnClick(R.id.image_view_play)
+    public void image_view_play_OnClick(View view) {
+        if (!isStarted) {
+            playSong(0);
+            return;
+        }
+
+        // check for already playing
+        if (mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null) {
+                mediaPlayer.pause();
+
+                songsList.get(currentSongIndex).setPaused(true);
+
+                // Changing button image to play button
+                btnPlay.setImageResource(R.drawable.baseline_play_circle_outline_white_48);
+            }
+        } else {
+            // Resume song
+            if (mediaPlayer != null) {
+                mediaPlayer.start();
+                songsList.get(currentSongIndex).setPaused(false);
+
+                // Changing button image to pause button
+                btnPlay.setImageResource(R.drawable.baseline_pause_circle_outline_white_48);
+            }
+        }
+
+        songAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Previous click
+     *
+     * @param view
+     */
+    @OnClick(R.id.image_view_previous)
+    public void image_view_previous_OnClick(View view) {
+        int songIndex;
+        if (currentSongIndex > 0) {
+            // Previous song
+            songIndex = currentSongIndex - 1;
+        } else {
+            // Last Song
+            songIndex = songsList.size() - 1;
+        }
+
+        playSong(songIndex);
+    }
+
+    /**
+     * Next click
+     *
+     * @param view
+     */
+    @OnClick(R.id.image_view_next)
+    public void image_view_next_OnClick(View view) {
+        int songIndex;
+        if (currentSongIndex < (songsList.size() - 1)) {
+            // Next song
+            songIndex = currentSongIndex + 1;
+        } else {
+            // First Song
+            songIndex = 0;
+        }
+
+        playSong(songIndex);
+    }
+
+    /**
+     * Repeat click
+     *
+     * @param view
+     */
+    @OnClick(R.id.image_view_repeat)
+    public void image_view_repeat_OnClick(View view) {
+        if (isRepeat) {
+            isRepeat = false;
+
+            Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
+            btnRepeat.setImageResource(R.drawable.ic_action_repeat_off);
+        } else {
+            isRepeat = true;
+
+            Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
+            btnRepeat.setImageResource(R.drawable.ic_action_repeat_on);
+        }
+    }
+
+    /**
+     * Shuffle click
+     *
+     * @param view
+     */
+    @OnClick(R.id.image_view_shuffle)
+    public void image_view_shuffle_OnClick(View view) {
+        if (isShuffle) {
+            isShuffle = false;
+
+            Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
+            btnShuffle.setImageResource(R.drawable.ic_action_shuffle_off);
+        } else {
+            isShuffle = true;
+
+            Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
+            btnShuffle.setImageResource(R.drawable.ic_action_shuffle_on);
+        }
     }
 
     /**
